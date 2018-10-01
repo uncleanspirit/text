@@ -1,0 +1,70 @@
+[
+    {
+        "name": "receiver_install",
+        "template": "od_receiver.json",
+        "stackPrefix": "",
+        "copyTemplatesToS3": "Y",
+        "configBucket": "s3://application-payload-${AWS_ACCOUNT}-${AWS_REGION}/od_receiver/${STACK_NAME}",
+        "templateBucket": "s3://application-payload-${AWS_ACCOUNT}-${AWS_REGION}/od_receiver/${STACK_NAME}/cf-templates",
+        "files": [ "playbooks" ]
+    }
+]
+
+default.json
+{
+    "Name": "${bamboo_buildResultKey}",
+    "Version": "${bamboo_buildResultKey}",
+    "Application": "WCS",
+    "LOB": "ESS",
+    "ExpirationDate": "2018-12-31 18"
+}
+
+params default.json
+{
+	"WebServerInstanceType" : "t2.large",
+	"LogLevel": "info",
+    "CloudFormationBucketURL": "https://s3.amazonaws.com/application-payload-${AWS_ACCOUNT}-${AWS_REGION}/od_receiver/${STACK_NAME}/cf-templates",
+    "InstanceProfileTemplateURL": "https://s3.amazonaws.com/application-payload-${AWS_ACCOUNT}-${AWS_REGION}/common-odreceiver/odreceiver-instance-profile/cf-templates/common-odreceiver.json",
+    "CertS3Bucket": "${AWS_ACCOUNT}-${AWS_REGION}-odreceiver-certs",
+    "ApplicationPayloadBukcet" : "application-payload-${AWS_ACCOUNT}-${AWS_REGION}",
+    "S3fsBucket": "${AWS_ACCOUNT}-${AWS_REGION}-opendeploy-fs",
+    "ServerContentURL": "s3://application-payload-${AWS_ACCOUNT}-${AWS_REGION}/od_receiver/${STACK_NAME}/files/",
+    "ApplicationName": "WCS",
+	"Version": "${STACK_NAME}",
+	"ClientAppPrefix": "${bamboo_buildResultKey}",
+	"EFSTargetCname" : "fs-1c72b254.efs.us-east-1.amazonaws.com",
+	"EFSTargetSG" : "sg-3197fb47"
+}
+
+params
+{
+	"AdGroupAccess": "LINUX DVT AWS TEST CFA SSH,ROL LINUX DVT AWS INSTITUTIONAL SSH",
+  	"AdGroupSudoAccess": "LINUX DVT AWS CFA SUDO,ROL LINUX DVT AWS INSTITUTIONAL SUDO",
+	"EC2KeyName": "userOpenDeploy-key",
+	"WebServerAsgDesiredCapacity": "1",
+	"WebServerAsgMaxSize": "2",
+	"WebServerAsgMinSize": "1",
+	"Route53HostedZone": "inse.c1.vanguard.com",
+	"SysLevel" :"eng",
+	"VPCName": "InstitutionalVpc",
+	"ELBS3LoggingBucket": "vgi-${AWS_REGION}-elb-int", 
+    "configBucket": "s3://application-payload-${AWS_ACCOUNT}-${AWS_REGION}/od_receiver/${STACK_NAME}",
+	"EFSTargetCname" :{
+			    "type": "stackOutput",
+    			"stackName": "ESSOD-RECEIVEREFS-3-eng",
+    			"outputName": "EFSFileSystem"
+  	},
+  	"EFSTargetSG" :{
+			    "type": "stackOutput",
+    			"stackName": "ESSOD-RECEIVEREFS-3-eng",
+    			"outputName": "EFSHostSecurityGroup"
+  	},
+	"AMIOSdistribution": "CentOS",
+	"AMIOSRelease": "7",
+	"AMIApplication": "UTS",
+	"AMIRole": "Base Linux AMI",
+	"RunSchedule": "{\"Mon\":[{\"S\":6,\"E\":18}],\"Tues\":[{\"S\":6,\"E\":18}],\"Wed\":[{\"S\":6,\"E\":18}],\"Thurs\":[{\"S\":6,\"E\":18}],\"Fri\":[{\"S\":6,\"E\":18}],\"Sat\":[{\"S\":6,\"E\":18}],\"Sun\":[{\"S\":6,\"E\":18}]}",
+	"Owner": "UNBZ",
+	"SupportEmail": "WCS_TeamSite_Support@vanguard.com"
+}
+
